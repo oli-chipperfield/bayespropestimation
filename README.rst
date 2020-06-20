@@ -97,3 +97,19 @@ Usage
 To use Bayesian estimation of proportions in a project::
 
     import bayespropestimation
+
+
+=====
+test math
+=====
+
+Test inline equation :math:`\\textrm{Beta}(y_k + \\alpha, n_k - y_k + \\beta)`
+
+Test math block:
+
+.. math::
+
+    p(\\theta_k | Y_k) \\propto L(Y_k | \\theta_k)p(\\theta_k)
+    \\propto \\Big( {n_k \\choose y_k} \\theta_k^{y_k} (1 - \\theta_k)^{(n_k - y_k)} \\Big) \\Big(\\frac{\\theta^{(\\alpha -1)}(1 - \\theta_k)^{(\\beta - 1)}}{\\mathbb{B}(\\alpha, \\beta)} \\Big)
+
+Test math block end
