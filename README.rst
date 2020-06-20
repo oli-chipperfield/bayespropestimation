@@ -75,6 +75,7 @@ Usage
 
 To use Bayesian estimation of proportions in a project
 .. code-block:: python
+
     import bayespropestimation
 
 Simple example
@@ -89,6 +90,7 @@ To carry out a simple estimation of the posterior density of two samples and an 
 Define the observed binomial data from samples A and B as two lists of format `[successes, trials]` and initialise the `BayesProportionsEstimation` class.
 
 .. code-block:: python
+
     a = [10, 50]
     b = [20, 50]
     ExampleBayes = BayesProportionsEstimation(a, b)
@@ -96,21 +98,21 @@ Define the observed binomial data from samples A and B as two lists of format `[
 Posterior densities are estimated when the class is intialised. There are three methods for accessing the draws from simulations of the posterior densities.
 
 .. code-block:: python
+
     ExampleBayes.get_posteriors()
     # Returns tuple of samples from the posterior distributions for parameters
 
 
-.. code-block::python
+.. code-block:: python
+
     ExampleBayes.quantile_summary()
     # Returns dataframe of quantiles and mean of the posterior densities of samples for parameters
 
 
-.. code-block::python
+.. code-block:: python
+
     ExampleBayes.kde_plot()
     # Returns KDE plot of samples from the posterior densities of the parameters
-
-
-.. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/improve-readme/images/example_kde.png
 
 
 Credits
