@@ -51,10 +51,10 @@ lint: ## check style with flake8
 	flake8 bayespropestimation tests
 
 test: ## run tests quickly with the default Python
-	pytest
+	pytest tests
 
-test-all: ## run tests on every Python version with tox
-	tox
+#test-all: ## run tests on every Python version with tox
+#	tox
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source bayespropestimation -m pytest
@@ -70,8 +70,8 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
 
-servedocs: docs ## compile the docs watching for changes
-	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
+#servedocs: docs ## compile the docs watching for changes
+#r	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
 release: dist ## package and upload a release
 	twine upload dist/*

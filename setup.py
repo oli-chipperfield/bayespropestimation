@@ -18,7 +18,7 @@ test_requirements = ['pytest>=3', ]
 
 setup(
     author="Oliver Chipperfield",
-    author_email='-',
+    author_email='omc1985@googlemail.com',
     python_requires='>=3.5',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
@@ -31,10 +31,10 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Class method for the Bayesian estimation and comparison of proportions",
+    description='Class method for the Bayesian estimation and comparison of proportions',
     install_requires=requirements,
     license="MIT license",
-    long_description=readme + '\n\n' + history,
+    long_description='test long description',  #readme + '\n\n' + history,
     include_package_data=True,
     keywords='bayespropestimation',
     name='bayespropestimation',
