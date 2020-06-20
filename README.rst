@@ -74,6 +74,7 @@ Usage
 =====
 
 To use Bayesian estimation of proportions in a project
+
 .. code-block:: python
 
     import bayespropestimation
@@ -114,6 +115,7 @@ Posterior densities are estimated when the class is intialised. There are three 
     ExampleBayes.kde_plot()
     # Returns KDE plot of samples from the posterior densities of the parameters
 
+.. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/improve-readme/images/example_kde.png
 
 Credits
 -------
