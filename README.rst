@@ -5,6 +5,7 @@ Bayesian estimation of proportions
 .. image:: https://img.shields.io/pypi/v/bayespropestimation.svg
         :target: https://pypi.python.org/pypi/bayespropestimation
 
+
 Simple class and methods for the Bayesian estimation and comparison of proportions.
 
 * Free software: MIT license
@@ -31,7 +32,7 @@ To install Bayesian estimation of proportions, run this command in your terminal
 
     $ pip install bayespropestimation
 
-This is the preferred method to install Bayesian estimation of proportions, as it will always install the most recent stable release.
+This is the preferred method to install the module, as it will always install the most recent stable release.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -41,8 +42,6 @@ you through the process.
 
 From sources
 ------------
-
-The sources for Bayesian estimation of proportions can be downloaded from the `Github repo`_.
 
 You can either clone the public repository:
 
@@ -66,6 +65,34 @@ Once you have a copy of the source, you can install it with:
 .. _Github repo: https://github.com/oli-chipperfield/bayespropestimation
 .. _tarball: https://github.com/oli-chipperfield/bayespropestimation/tarball/master
 
+=====
+Usage
+=====
+
+To use Bayesian estimation of proportions in a project::
+
+    import bayespropestimation
+
+Example
+--------------
+
+Import the `BayesProportionsEstimation` class.
+
+.. code-block:: python
+
+    from bayespropestimation.bayespropestimation import BayesProportionsEstimation
+
+Define the observed binomial data from samples A and B as two lists of format `[successes, trials]` and initialise the `BayesProportionsEstimation` class.
+
+.. code-block:: python
+
+    a = [10, 50]
+    b = [20, 50]
+    ExampleBayes = BayesProportionsEstimation(a, b)
+
+
+
+
 
 
 
@@ -79,13 +106,8 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 
 .. highlight:: shell
 
-=====
-Usage
-=====
 
-To use Bayesian estimation of proportions in a project::
 
-    import bayespropestimation
 
 
 
