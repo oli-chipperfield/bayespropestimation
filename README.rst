@@ -89,7 +89,7 @@ To carry out a simple estimation of the posterior density of two samples and an 
 
     from bayespropestimation.bayespropestimation import BayesProportionsEstimation
 
-Define the observed binomial data from samples A and B as two lists of format `[successes, trials]` and initialise the `BayesProportionsEstimation` class.
+Define data from samples A and B as two lists of format `[successes, trials]` and initialise the `BayesProportionsEstimation` class.
 
 .. code-block:: python
 
@@ -114,7 +114,8 @@ Posterior densities are estimated when the class is intialised. There are three 
 .. code-block:: python
 
     ExampleBayes.kde_plot()
-    # Returns KDE plot of samples from the posterior densities of the parameters with shading denoting the 95% (default credible intervals)
+    # Returns KDE plot of samples from the posterior densities of the parameters
+    # Shading denote the 95% (default) credible intervals
 
 .. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/improve-readme/images/example_kde.png
 
