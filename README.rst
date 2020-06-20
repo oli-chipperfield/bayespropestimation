@@ -68,6 +68,7 @@ Once you have a copy of the source, you can install it with:
 Methodology
 ===========
 
+watch this space
 
 =====
 Usage
@@ -103,8 +104,6 @@ Posterior densities are estimated when the class is intialised. There are three 
     ExampleBayes.get_posteriors()
     # Returns tuple of samples from the posterior distributions for parameters
 
-.. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/improve-readme/images/example_posterior.png
-
 .. code-block:: python
 
     ExampleBayes.quantile_summary()
@@ -115,9 +114,11 @@ Posterior densities are estimated when the class is intialised. There are three 
 .. code-block:: python
 
     ExampleBayes.kde_plot()
-    # Returns KDE plot of samples from the posterior densities of the parameters
+    # Returns KDE plot of samples from the posterior densities of the parameters with shading denoting the 95% (default credible intervals)
 
 .. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/improve-readme/images/example_kde.png
+
+To see how to use non-default parameters, refer to the doc-strings in the `source <https://github.com/oli-chipperfield/bayespropestimation/blob/improve-readme/bayespropestimation/bayespropestimation.py>`_.
 
 Credits
 -------
@@ -128,26 +129,3 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
 
 .. highlight:: shell
-
-
-
-
-
-
-
-
-
-=====
-test math
-=====
-
-Test inline equation :math:`\\textrm{Beta}(y_k + \\alpha, n_k - y_k + \\beta)`
-
-Test math block:
-
-.. math::
-
-    p(\\theta_k | Y_k) \\propto L(Y_k | \\theta_k)p(\\theta_k)
-    \\propto \\Big( {n_k \\choose y_k} \\theta_k^{y_k} (1 - \\theta_k)^{(n_k - y_k)} \\Big) \\Big(\\frac{\\theta^{(\\alpha -1)}(1 - \\theta_k)^{(\\beta - 1)}}{\\mathbb{B}(\\alpha, \\beta)} \\Big)
-
-Test math block end
