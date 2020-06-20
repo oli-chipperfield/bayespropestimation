@@ -10,31 +10,39 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [ ]
+requirements = ['numpy>=1.17.2',
+                'pandas>=0.25.1',
+                'matplotlib>=3.1.1',
+                'seaborn>=0.9.0']
 
-setup_requirements = ['pytest-runner', ]
+setup_requirements = ['pytest-runner',
+                      'numpy>=1.17.2',
+                      'pandas>=0.25.1',
+                      'matplotlib>=3.1.1',
+                      'seaborn>=0.9.0']
 
-test_requirements = ['pytest>=3', ]
+test_requirements = ['pytest>=3',
+                     'numpy>=1.17.2',
+                     'pandas>=0.25.1',
+                     'matplotlib>=3.1.1',
+                     'seaborn>=0.9.0']
 
 setup(
     author="Oliver Chipperfield",
-    author_email='-',
-    python_requires='>=3.5',
+    author_email='omc0dev@googlemail.com',
+    python_requires='>=3.7',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Class method for the Bayesian estimation and comparison of proportions",
+    description='Class method for the Bayesian estimation and comparison of proportions',
     install_requires=requirements,
     license="MIT license",
-    long_description=readme + '\n\n' + history,
+    long_description='test long description',  #readme + '\n\n' + history,
     include_package_data=True,
     keywords='bayespropestimation',
     name='bayespropestimation',
@@ -43,6 +51,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/oli-chipperfield/bayespropestimation',
-    version='0.1.0',
+    version='0.1.2',
     zip_safe=False,
 )
