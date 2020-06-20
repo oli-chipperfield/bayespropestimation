@@ -60,13 +60,14 @@ class BayesProportionsEstimation:
         Retrieves random draws from the posterior
         Returns
         -------
-        theta_a:  np.array[n] draws from the posterior of theta_a
-        theta_b:  np.array[n] draws from the posterior of theta_b
-        delta:  np.array[n] draws from the posterior of theta_b minus draws from the posterior of theta_a
+        tuple:
+            - np.array[n] draws from the posterior of theta_a
+            - np.array[n] draws from the posterior of theta_b
+            - np.array[n] draws from the posterior of theta_b minus draws from the posterior of theta_a
         '''
-        return {'theta_a': self.a_draw, 
-                'theta_b': self.b_draw, 
-                'delta': self.d_draw}
+        return (self.a_draw, 
+                self.b_draw, 
+                self.d_draw)
 
     def _calculate_quantiles(self, d, mean, quantiles):
         # Calculate mean and quantiles
