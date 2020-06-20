@@ -103,12 +103,14 @@ Posterior densities are estimated when the class is intialised. There are three 
     ExampleBayes.get_posteriors()
     # Returns tuple of samples from the posterior distributions for parameters
 
+.. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/improve-readme/images/example_posterior.png
 
 .. code-block:: python
 
     ExampleBayes.quantile_summary()
     # Returns dataframe of quantiles and mean of the posterior densities of samples for parameters
 
+.. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/improve-readme/images/example_quantile.png
 
 .. code-block:: python
 
