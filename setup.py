@@ -27,6 +27,21 @@ test_requirements = ['pytest>=3',
                      'matplotlib>=3.1.1',
                      'seaborn>=0.9.0']
 
+long_description = '''
+
+Simple class and methods for the Bayesian estimation and comparison of proportions.  i.e. a simple Bayesian AB test of proportions.  
+
+- A user can input the results from two samples, A and B, and get estimates of the posterior density and their difference.  
+
+- Estimation is from simple simulation from the conjugate posterior distributions.  
+
+- Provides summary statistics and visualisations for the estimated parameters.
+
+- The prior distribution, sample count, random seed, credible intervals and parameter names can all be customised.
+
+'''
+
+
 setup(
     author="Oliver Chipperfield",
     author_email='omc0dev@googlemail.com',
@@ -42,7 +57,7 @@ setup(
     description='Class method for the Bayesian estimation and comparison of proportions',
     install_requires=requirements,
     license="MIT license",
-    long_description='test long description',  #readme + '\n\n' + history,
+    long_description=long_description,  #readme + '\n\n' + history,
     include_package_data=True,
     keywords='bayespropestimation',
     name='bayespropestimation',
@@ -51,6 +66,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/oli-chipperfield/bayespropestimation',
-    version='0.1.2',
+    version='0.1.4',
     zip_safe=False,
 )
