@@ -68,7 +68,7 @@ Once you have a copy of the source, you can install it with:
 Methodology
 ===========
 
-See `notebook <https://github.com/oli-chipperfield/bayespropestimation/docs/bayespropestimation_basis.ipynb>` for details.
+See `notebook <https://github.com/oli-chipperfield/bayespropestimation/blob/master/docs/bayespropestimation_basis.ipynb>`_ for details.
 
 =====
 Usage
@@ -109,7 +109,7 @@ Posterior densities are estimated when the class is intialised. There are three 
     ExampleBayes.quantile_summary()
     # Returns dataframe of quantiles and mean of the posterior densities of samples for parameters
 
-.. image:: https://github.com/oli-chipperfield/bayespropestimation/images/example_quantile.png
+.. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/master/images/example_quantile.png
 
 .. code-block:: python
 
@@ -117,9 +117,9 @@ Posterior densities are estimated when the class is intialised. There are three 
     # Returns KDE plot of samples from the posterior densities of the parameters
     # Shading denote the 95% (default) credible intervals
 
-.. image:: https://github.com/oli-chipperfield/bayespropestimation/images/example_kde.png
+.. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/master/images/example_kde.png
 
-To see how to use non-default parameters, refer to the `usage guid <https://github.com/oli-chipperfield/bayespropestimation/docs/bayespropestimation_usage.ipynb>` or refer to the doc-strings in the `source <https://github.com/oli-chipperfield/bayespropestimation/bayespropestimation/bayespropestimation.py>`_.
+To see how to use non-default parameters, refer to the `usage guid <https://github.com/oli-chipperfield/bayespropestimation/blob/master/docs/bayespropestimation_usage.ipynb>`_ or refer to the doc-strings in the `source <https://github.com/oli-chipperfield/bayespropestimation/bayespropestimation/bayespropestimation.py>`_.
 
 Credits
 -------
