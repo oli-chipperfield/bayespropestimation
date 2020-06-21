@@ -34,8 +34,8 @@ class BayesProportionsEstimation:
             raise ValueError("type(a).__name__ and/or type(b).__name__ must be 'list', 'ndarray' or 'DataFrame'")
         if ((self.a[0] > self.a[1]) or (self.b[0] > self.b[1])):
             raise ValueError("the count of successes for a and/or b exceeds the number of trials")
-        if ((self.prior_alpha < 0 or self.prior_alpha > 1) or (self.prior_beta < 0 or self.prior_beta > 1)):
-            raise ValueError("the prior_alpha and/or prior_beta parameters must be between 0 and 1")
+        if ((self.prior_alpha <= 0) or (self.prior_beta <= 0)):
+            raise ValueError("the prior_alpha and/or prior_beta parameters must be > 0")
         if self.n <= 0:
             raise ValueError("n must be a positive integer")
         if self.seed is not None and str(self.seed).isdigit() == False:

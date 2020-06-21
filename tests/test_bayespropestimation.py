@@ -139,7 +139,7 @@ def test_BayesProportionsEstimation_with_a_bad_proportion_returns_ValueError(mak
 def test_BayesProportionsEstimation_with_make_invalid_prior_returns_ValueError(make_a_list, make_b_list, make_invalid_prior):
     with pytest.raises(ValueError) as e:
         BayesProportionsEstimation(a=make_a_list, b=make_b_list, prior_alpha=make_invalid_prior)
-    assert str(e.value) == "the prior_alpha and/or prior_beta parameters must be between 0 and 1"
+    assert str(e.value) == "the prior_alpha and/or prior_beta parameters must be > 0"
 
 def test_BayesProportionsEstimation_with_make_invalid_n_returns_ValueError(make_a_list, make_b_list, make_invalid_n):
     with pytest.raises(ValueError) as e:
