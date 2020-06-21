@@ -60,13 +60,14 @@ class BayesProportionsEstimation:
         Retrieves random draws from the posterior
         Returns
         -------
-        theta_a:  np.array[n] draws from the posterior of theta_a
-        theta_b:  np.array[n] draws from the posterior of theta_b
-        delta:  np.array[n] draws from the posterior of theta_b minus draws from the posterior of theta_a
+        tuple:
+            - np.array[n] draws from the posterior of theta_a
+            - np.array[n] draws from the posterior of theta_b
+            - np.array[n] draws from the posterior of theta_b minus draws from the posterior of theta_a
         '''
-        return {'theta_a': self.a_draw, 
-                'theta_b': self.b_draw, 
-                'delta': self.d_draw}
+        return (self.a_draw, 
+                self.b_draw, 
+                self.d_draw)
 
     def _calculate_quantiles(self, d, mean, quantiles):
         # Calculate mean and quantiles
@@ -75,13 +76,14 @@ class BayesProportionsEstimation:
             q = np.append(q, np.mean(d))    
         return q
 
-    def quantile_summary(self, mean=True, quantiles=[0.025, 0.5, 0.975]):
+    def quantile_summary(self, mean=True, quantiles=[0.025, 0.5, 0.975], names = None):
         '''
         Summarises the properties of the estimated posterior
         Parameters
         ----------
-        mean:  boolean, default True, calculates the mean of the draws from the posterior
-        quantiles: list, calculates the quantiles of the draws from the posterior
+        mean:  boolean, default True, calculates the mean of the draws from the posterior.  Default True
+        quantiles: list, calculates the quantiles of the draws from the posterior.  Default [0.025, 0.5, 0.975]
+        names:  list of length 3, parameter names in order: a, b, b-a.  Default ['theta_a', 'theta_b', 'delta']
         Returns
         -------
         pd.DataFrame:  
@@ -92,11 +94,14 @@ class BayesProportionsEstimation:
         if quantiles is None:
             raise ValueError("quantiles must be a list of length > 0")      
         draws = [self.a_draw, self.b_draw, self.d_draw]
-        names = [
-                'theta_a',
-                'theta_b',
-                'delta'
-                ]
+        if names is None:
+            names = [
+                    'theta_a',
+                    'theta_b',
+                    'delta'
+                    ]
+        if len(names) > 3:
+            raise ValueError('names must be a list of length 3')
         q = []
         for i in draws:
             q.append(self._calculate_quantiles(i, mean, quantiles))
@@ -108,22 +113,26 @@ class BayesProportionsEstimation:
         df['parameter'] = names
         return df
 
-    def kde_plot(self, quantiles=[0.025, 0.975], fig_size=(15, 5)):
+    def kde_plot(self, quantiles=[0.025, 0.975], fig_size=(15, 5), names=None):
         '''
         Plots the density of the draws from the posterior distribution
         Parameters
         ----------
-        quantiles: list, quantiles to denote credible intervals.  Default [0.025, 0.975]
+        quantiles: list of length 2, quantiles to denote credible intervals.  Default [0.025, 0.975]
         fig_size: tuple, plot dimensions (width, height).  Default (15, 5)
+        names: list of length 3, parameter names for kde plot.  Default ['theta_a', 'theta_b', 'delta']
         '''        
         if len(quantiles) != 2:
             raise ValueError("quantiles must be a list of length 2")
-        draws = [self.a_draw, self.b_draw, self.d_draw]
-        names = [
+        if names is None:
+            names = [
                 'theta_a',
                 'theta_b',
                 'delta'
                 ]
+        if len(names) > 3:
+            raise ValueError('names must be a list of length 3')
+        draws = [self.a_draw, self.b_draw, self.d_draw]
         fig, axes = plt.subplots(1, 3, figsize=fig_size)
         for i in range(0, 3):
             sns.kdeplot(draws[i], ax=axes[i])

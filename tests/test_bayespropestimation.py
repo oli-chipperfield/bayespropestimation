@@ -82,9 +82,9 @@ def make_quantile_summary_results():
 
 @pytest.fixture
 def make_get_posterior_results():
-    return np.array([[0.15608103, 0.35279345, 0.19671241],
-                     [0.17790474, 0.3636633 , 0.18575856],
-                     [0.24626163, 0.51329111, 0.26702948]])
+    return np.array([[0.15608103, 0.17790474, 0.24626163],
+                    [0.35279345, 0.3636633 , 0.51329111],
+                    [0.19671241, 0.18575856, 0.26702948]])
 
 # Run initialisation tests
 
