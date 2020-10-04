@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import scipy as scipy
+import arviz as az
 
 
 class BayesProportionsEstimation:
@@ -76,9 +78,9 @@ class BayesProportionsEstimation:
             q = np.append(q, np.mean(d))    
         return q
 
-    def quantile_summary(self, mean=True, quantiles=[0.025, 0.5, 0.975], names = None):
+    def quantile_summary(self, mean=True, quantiles=[0.025, 0.5, 0.975], names=None):
         '''
-        Summarises the properties of the estimated posterior
+        Summarises the properties of the estimated posterior using quantiles
         Parameters
         ----------
         mean:  boolean, default True, calculates the mean of the draws from the posterior.  Default True
@@ -113,6 +115,53 @@ class BayesProportionsEstimation:
         df['parameter'] = names
         return df
 
+    def _calculate_hdi_and_map(self, d, mean, interval):
+        # Calculate HDI interval and MAP
+        q = az.hdi(d, hdi_prob=interval)
+        m = self._calculate_map(d)
+        q = np.array([q[0], m, q[1]])
+        if mean is True:
+            q = np.append(q, np.mean(d))
+        return q
+
+    def hdi_summary(self, mean=True, interval=0.95, names=None):
+        '''
+        Summarises the properties of the estimated posterior using the MAP and HDI
+        Parameters
+        ----------
+        mean:  boolean, default True, calculates the mean of the draws from the posterior.  Default True
+        interval: float, defines the HDI interval.  Default = 0.95 (i.e. 95% HDI interval)
+        names:  list of length 3, parameter names in order: a, b, b-a.  Default ['theta_a', 'theta_b', 'delta']
+        Returns
+        -------
+        pd.DataFrame:  
+            'theta_a':  summaries of the posterior of theta_a
+            'theta_b':  summaries of the posterior of theta_b
+            'delta':  summaries of the posterior of theta_b - theta_a
+        '''
+        if interval is None or interval <= 0 or interval >= 1:
+            raise ValueError("interval must be a float > 0 and < 1")      
+        draws = [self.a_draw, self.b_draw, self.d_draw]
+        if names is None:
+            names = [
+                    'theta_a',
+                    'theta_b',
+                    'delta'
+                    ]
+        if len(names) > 3:
+            raise ValueError('names must be a list of length 3')
+        q = []
+        for i in draws:
+            q.append(self._calculate_hdi_and_map(i, mean, interval))        
+        df = pd.DataFrame(np.array(q))
+        col_names = ['%.5g' % ((1 - interval) / 2), 'MAP', '%.5g' % (interval + ((1 - interval) / 2))]
+        if mean is True:
+            df.columns = col_names + ['mean']
+        else:
+            df.columns = col_names
+        df['parameter'] = names
+        return df    
+
     def kde_plot(self, quantiles=[0.025, 0.975], fig_size=(15, 5), names=None):
         '''
         Plots the density of the draws from the posterior distribution
@@ -126,10 +175,10 @@ class BayesProportionsEstimation:
             raise ValueError("quantiles must be a list of length 2")
         if names is None:
             names = [
-                'theta_a',
-                'theta_b',
-                'delta'
-                ]
+                    'theta_a',
+                    'theta_b',
+                    'delta'
+                    ]
         if len(names) > 3:
             raise ValueError('names must be a list of length 3')
         draws = [self.a_draw, self.b_draw, self.d_draw]
@@ -143,3 +192,15 @@ class BayesProportionsEstimation:
             axes[i].fill_between(x, y, where=((x <= q[0]) | (x >= q[1])), alpha=0.1)
             if i == 2:
                 axes[i].axvline(0, ls='--', color='red')
+
+    def _calculate_kde(self, draws, num=10000):
+        # Estimates a KDE distribution from the posterior draws
+        kde = scipy.stats.gaussian_kde(draws)
+        x = np.linspace(np.min(draws), np.max(draws), num=num)
+        kde_density = kde(x)
+        return x, kde_density
+
+    def _calculate_map(self, draws, num=10000):
+        # Estimates the MAP based on the maxima of the KDE estimate
+        x, kde_density = self._calculate_kde(draws, num=num)
+        return x[np.argmax(kde_density)]

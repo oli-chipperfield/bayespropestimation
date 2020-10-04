@@ -86,6 +86,12 @@ def make_get_posterior_results():
                     [0.35279345, 0.3636633 , 0.51329111],
                     [0.19671241, 0.18575856, 0.26702948]])
 
+@pytest.fixture
+def make_hdi_summary_results():
+    return np.array([[0.1038032606788284, 0.19275171884176634, 0.320526260831967],
+                     [0.2691767369659035, 0.3986262017019868, 0.5338200338157294],
+                     [0.0242652248218867, 0.19609368609983302, 0.3745174565063844]])
+
 # Run initialisation tests
 
 def test_BayesProportionsEstimation_with_make_a_list_and_make_b_list_initialises(make_a_list, make_b_list):
@@ -157,7 +163,13 @@ def test_BayesProportionsEstimation_quantile_summary_returns_correct_results(mak
     test = np.array(BayesProportionsEstimation(a=make_a_list, b=make_b_list, seed=make_explicit_seed).quantile_summary())[:,0:3]
     assert np.array_equal(test, make_quantile_summary_results)
 
+def test_BayesProportionsEstimation_hdi_summary_returns_correct_results(make_a_list, make_b_list, make_explicit_seed, make_quantile_summary_results, make_hdi_summary_results):
+    test = np.array(BayesProportionsEstimation(a=make_a_list, b=make_b_list, seed=make_explicit_seed).hdi_summary())[:,0:3]
+    assert np.array_equal(test, make_hdi_summary_results)
+
 def test_BayesProportionsEstimation_get_posteriors_returns_correct_results(make_a_list, make_b_list, make_explicit_n, make_explicit_seed, make_get_posterior_results):
     test = BayesProportionsEstimation(make_a_list, make_b_list, n=make_explicit_n, seed=make_explicit_seed).get_posteriors()
     test = np.array(pd.DataFrame(test))
     assert np.allclose(test, make_get_posterior_results)
+
+
