@@ -348,12 +348,25 @@ class BayesProportionsEstimation:
 
     def posterior_plot(self, 
                        method='hdi', 
-                       col='#1f77b4', 
                        delta_line=0,
-                       fig_size=None,
+                       col='#1f77b4', 
                        bounds=None,
-                       names=None):
-        '''effef
+                       names=None,
+                       fig_size=None):
+        '''
+        Plots the density of the draws from the posterior distribution
+        Parameters
+        ----------
+        method: str, defines method for interval estimate and central tendency.  Default = 'hdi'
+            - 'hdi':  Uses HDI and maximum aposteriori
+            - 'quantile': Uses credible intervals and median
+        delta_line: float, position of the vertical line on the delta plot
+        col:  str, colour of plots.  Default = '#1f77b4' (muted-blue)
+        bounds:  float or list, defines the boundaries of the interval
+            - if method = 'hdi': float, defines the interval of the HDI. Default = 0.95
+            - if method = 'quantile': list, defines the credible interval.  Default = [0.025, 0.975]
+        names: list of length 3, parameter names for the plot.  Default ['theta_a', 'theta_b', 'delta']
+        fig_size:  tuple(width, height), dimensions of plot.  Default is None
         '''
         valid_methods = ['hdi', 'quantile']
         if method not in valid_methods:
