@@ -320,37 +320,6 @@ class BayesProportionsEstimation:
             print(self._print_inference_bayes_factor(bf, i, direction, value, names))
         return bf, i
 
-    def kde_plot(self, quantiles=[0.025, 0.975], fig_size=(15, 5), names=None):
-        '''
-        Plots the density of the draws from the posterior distribution
-        Parameters
-        ----------
-        quantiles: list of length 2, quantiles to denote credible intervals.  Default [0.025, 0.975]
-        fig_size: tuple, plot dimensions (width, height).  Default (15, 5)
-        names: list of length 3, parameter names for kde plot.  Default ['theta_a', 'theta_b', 'delta']
-        '''        
-        if len(quantiles) != 2:
-            raise ValueError("quantiles must be a list of length 2")
-        if names is None:
-            names = [
-                    'theta_a',
-                    'theta_b',
-                    'delta'
-                    ]
-        if len(names) > 3:
-            raise ValueError('names must be a list of length 3')
-        draws = [self.a_draw, self.b_draw, self.d_draw]
-        fig, axes = plt.subplots(1, 3, figsize=fig_size)
-        for i in range(0, 3):
-            sns.kdeplot(draws[i], ax=axes[i])
-            axes[i].set(xlabel=names[i], ylabel='density')    
-            x, y = axes[i].lines[0].get_data()
-            q = self._calculate_quantiles(draws[i], mean=False, quantiles=quantiles)
-            axes[i].fill_between(x, y, where=((x >= q[0]) & (x <= q[1])), alpha=0.2)
-            axes[i].fill_between(x, y, where=((x <= q[0]) | (x >= q[1])), alpha=0.1)
-            if i == 2:
-                axes[i].axvline(0, ls='--', color='red')
-
     def posterior_plot(self, 
                        method='hdi', 
                        delta_line=0,
