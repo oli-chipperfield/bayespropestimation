@@ -6,10 +6,15 @@ import scipy as scipy
 import arviz as az
 
 from plotly.subplots import make_subplots
-
-from bayespropestimation.bayesprophelpers import _calculate_kde, _calculate_map
-from bayespropestimation.bayespropplotters import _get_centre_lines, _get_intervals, _make_density_go 
-from bayespropestimation.bayespropplotters import _make_histogram_go, _make_area_go, _make_line_go, _make_delta_line
+from bayespropestimation.bayesprophelpers import _calculate_kde
+from bayespropestimation.bayesprophelpers import _calculate_map
+from bayespropestimation.bayespropplotters import _get_centre_lines
+from bayespropestimation.bayespropplotters import _get_intervals 
+from bayespropestimation.bayespropplotters import _make_density_go 
+from bayespropestimation.bayespropplotters import _make_histogram_go 
+from bayespropestimation.bayespropplotters import _make_area_go
+from bayespropestimation.bayespropplotters import _make_line_go
+from bayespropestimation.bayespropplotters import _make_delta_line
 
 class BayesProportionsEstimation:
 
