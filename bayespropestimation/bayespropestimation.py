@@ -5,6 +5,16 @@ import seaborn as sns
 import scipy as scipy
 import arviz as az
 
+from plotly.subplots import make_subplots
+from bayespropestimation.bayesprophelpers import _calculate_kde
+from bayespropestimation.bayesprophelpers import _calculate_map
+from bayespropestimation.bayespropplotters import _get_centre_lines
+from bayespropestimation.bayespropplotters import _get_intervals 
+from bayespropestimation.bayespropplotters import _make_density_go 
+from bayespropestimation.bayespropplotters import _make_histogram_go 
+from bayespropestimation.bayespropplotters import _make_area_go
+from bayespropestimation.bayespropplotters import _make_line_go
+from bayespropestimation.bayespropplotters import _make_delta_line
 
 class BayesProportionsEstimation:
 
@@ -118,7 +128,7 @@ class BayesProportionsEstimation:
     def _calculate_hdi_and_map(self, d, mean, interval):
         # Calculate HDI interval and MAP
         q = az.hdi(d, hdi_prob=interval)
-        m = self._calculate_map(d)
+        m = _calculate_map(d)
         q = np.array([q[0], m, q[1]])
         if mean is True:
             q = np.append(q, np.mean(d))
@@ -310,16 +320,38 @@ class BayesProportionsEstimation:
             print(self._print_inference_bayes_factor(bf, i, direction, value, names))
         return bf, i
 
-    def kde_plot(self, quantiles=[0.025, 0.975], fig_size=(15, 5), names=None):
+    def posterior_plot(self, 
+                       method='hdi', 
+                       delta_line=0,
+                       col='#1f77b4', 
+                       bounds=None,
+                       names=None,
+                       fig_size=None):
         '''
         Plots the density of the draws from the posterior distribution
         Parameters
         ----------
-        quantiles: list of length 2, quantiles to denote credible intervals.  Default [0.025, 0.975]
-        fig_size: tuple, plot dimensions (width, height).  Default (15, 5)
-        names: list of length 3, parameter names for kde plot.  Default ['theta_a', 'theta_b', 'delta']
-        '''        
-        if len(quantiles) != 2:
+        method: str, defines method for interval estimate and central tendency.  Default = 'hdi'
+            - 'hdi':  Uses HDI and maximum aposteriori
+            - 'quantile': Uses credible intervals and median
+        delta_line: float, position of the vertical line on the delta plot
+        col:  str, colour of plots.  Default = '#1f77b4' (muted-blue)
+        bounds:  float or list, defines the boundaries of the interval
+            - if method = 'hdi': float, defines the interval of the HDI. Default = 0.95
+            - if method = 'quantile': list, defines the credible interval.  Default = [0.025, 0.975]
+        names: list of length 3, parameter names for the plot.  Default ['theta_a', 'theta_b', 'delta']
+        fig_size:  tuple(width, height), dimensions of plot.  Default is None
+        '''
+        valid_methods = ['hdi', 'quantile']
+        if method not in valid_methods:
+            raise ValueError("method must be 'hdi' or 'quantile'")
+        if method == 'hdi' and bounds is None:
+            bounds = 0.95
+        if method == 'quantile' and bounds is None:
+            bounds = [0.025, 0.975]
+        if method == 'hdi' and (bounds <= 0 or bounds >= 1):
+            raise ValueError("if method is 'hdi' then bounds must be a float between 0 and 1")
+        if method == 'quantiles' and len(quantiles) != 2:
             raise ValueError("quantiles must be a list of length 2")
         if names is None:
             names = [
@@ -328,27 +360,41 @@ class BayesProportionsEstimation:
                     'delta'
                     ]
         if len(names) > 3:
-            raise ValueError('names must be a list of length 3')
-        draws = [self.a_draw, self.b_draw, self.d_draw]
-        fig, axes = plt.subplots(1, 3, figsize=fig_size)
-        for i in range(0, 3):
-            sns.kdeplot(draws[i], ax=axes[i])
-            axes[i].set(xlabel=names[i], ylabel='density')    
-            x, y = axes[i].lines[0].get_data()
-            q = self._calculate_quantiles(draws[i], mean=False, quantiles=quantiles)
-            axes[i].fill_between(x, y, where=((x >= q[0]) & (x <= q[1])), alpha=0.2)
-            axes[i].fill_between(x, y, where=((x <= q[0]) | (x >= q[1])), alpha=0.1)
-            if i == 2:
-                axes[i].axvline(0, ls='--', color='red')
+            raise ValueError('names must be a list of length 3')   
+        if method == 'hdi':
+            interval_name = 'hdi'
+            centre_line_name = 'map'
+        else: 
+            interval_name = 'credible interval'
+            centre_line_name = 'median'               
+        fig = make_subplots(rows=1,
+                            cols=3,
+                            shared_xaxes=False,
+                            shared_yaxes=False,
+                            subplot_titles=tuple(names))
+        draws = [
+                 self.a_draw,
+                 self.b_draw,
+                 self.d_draw
+                 ]
+        for i in range(0,3):
+            cl = _get_centre_lines(draws[i], method=method)
+            intervals = _get_intervals(draws[i], method=method, bounds=bounds)
+            fig.add_trace(_make_density_go(draws[i], name='posterior density', col=col), 1, i+1)
+            fig.add_trace(_make_histogram_go(draws[i], name='posterior draws', col=col), 1, i+1)  
+            fig.add_trace(_make_line_go(cl, name=centre_line_name, col=col), 1, i+1)   
+            fig.add_trace(_make_area_go(intervals, name=interval_name, col=col), 1, i+1)       
+        fig.update_layout(shapes=[_make_delta_line(self.d_draw, delta_line=delta_line)])
+        fig.update_yaxes(title_text='density', row=1, col=1)
+        name_set = set()
+        fig.for_each_trace(lambda trace: 
+            trace.update(showlegend=False)
+                if (trace.name in name_set) else name_set.add(trace.name))
+        if fig_size is not None:
+            fig.update_layout(height=fig_size[1], width=fig_size[0])
+        return fig
 
-    def _calculate_kde(self, draws, num=10000):
-        # Estimates a KDE distribution from the posterior draws
-        kde = scipy.stats.gaussian_kde(draws)
-        x = np.linspace(np.min(draws), np.max(draws), num=num)
-        kde_density = kde(x)
-        return x, kde_density
 
-    def _calculate_map(self, draws, num=10000):
-        # Estimates the MAP based on the maxima of the KDE estimate
-        x, kde_density = self._calculate_kde(draws, num=num)
-        return x[np.argmax(kde_density)]
+
+
+
