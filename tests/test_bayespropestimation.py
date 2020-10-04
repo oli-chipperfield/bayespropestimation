@@ -101,6 +101,16 @@ def make_hdi_summary_results():
                      [0.2691767369659035, 0.3986262017019868, 0.5338200338157294],
                      [0.0242652248218867, 0.19609368609983302, 0.3745174565063844]])
 
+# Define fixtures for delta inference testing
+
+@pytest.fixture
+def make_infer_delta_probability_result():
+    return (0.9863, 'almost certain')
+
+@pytest.fixture
+def make_infer_delta_bayes_factor_result():
+    return (71.99270072992677, 'very strong')
+
 # Define fixtures for bayeprophelpers testing
 
 @pytest.fixture
@@ -207,6 +217,18 @@ def test_BayesProportionsEstimation_get_posteriors_returns_correct_results(make_
     test = np.array(pd.DataFrame(test))
     assert np.allclose(test, make_get_posterior_results)
 
+# Run delta inference tests
+
+def test_infer_delta_probability_returns_correct_values(make_a_list, make_b_list, make_explicit_seed, make_infer_delta_probability_result):
+    p, i = BayesProportionsEstimation(a=make_a_list, b=make_b_list, seed=make_explicit_seed).infer_delta_probability()
+    assert np.isclose(p, make_infer_delta_probability_result[0])
+    assert i == make_infer_delta_probability_result[1]
+
+def test_infer_delta_bayes_factor_returns_correct_values(make_a_list, make_b_list, make_explicit_seed, make_infer_delta_bayes_factor_result):
+    bf, i = BayesProportionsEstimation(a=make_a_list, b=make_b_list, seed=make_explicit_seed).infer_delta_bayes_factor()
+    assert np.isclose(bf, make_infer_delta_bayes_factor_result[0])
+    assert i == make_infer_delta_bayes_factor_result[1]
+
 # RUn bayespropplotters tests
 
 def test__get_centre_lines_runs_without_error(make_draw):
@@ -250,5 +272,13 @@ def test__make_area_go_without_error(make_draw):
     try:
         intervals = _get_intervals(make_draw, method='hdi', bounds=0.95)
         _make_area_go(intervals, name='dummy')
+    except:
+        raise pytest.fail()
+
+# Run plot_posterior method test
+
+def test_plot_posterior_with_error(make_a_list, make_b_list, make_explicit_seed):
+    try:
+        BayesProportionsEstimation(a=make_a_list, b=make_b_list, seed=make_explicit_seed).posterior_plot()
     except:
         raise pytest.fail()
