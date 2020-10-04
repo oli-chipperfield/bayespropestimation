@@ -5,6 +5,11 @@ import seaborn as sns
 import scipy as scipy
 import arviz as az
 
+from plotly.subplots import make_subplots
+
+from bayespropestimation.bayesprophelpers import _calculate_kde, _calculate_map
+from bayespropestimation.bayespropplotters import _get_centre_lines, _get_intervals, _make_density_go 
+from bayespropestimation.bayespropplotters import _make_histogram_go, _make_area_go, _make_line_go, _make_delta_line
 
 class BayesProportionsEstimation:
 
@@ -118,7 +123,7 @@ class BayesProportionsEstimation:
     def _calculate_hdi_and_map(self, d, mean, interval):
         # Calculate HDI interval and MAP
         q = az.hdi(d, hdi_prob=interval)
-        m = self._calculate_map(d)
+        m = _calculate_map(d)
         q = np.array([q[0], m, q[1]])
         if mean is True:
             q = np.append(q, np.mean(d))
@@ -341,14 +346,68 @@ class BayesProportionsEstimation:
             if i == 2:
                 axes[i].axvline(0, ls='--', color='red')
 
-    def _calculate_kde(self, draws, num=10000):
-        # Estimates a KDE distribution from the posterior draws
-        kde = scipy.stats.gaussian_kde(draws)
-        x = np.linspace(np.min(draws), np.max(draws), num=num)
-        kde_density = kde(x)
-        return x, kde_density
+    def posterior_plot(self, 
+                       method='hdi', 
+                       col='#1f77b4', 
+                       delta_line=0,
+                       fig_size=None,
+                       bounds=None,
+                       names=None):
+        '''effef
+        '''
+        valid_methods = ['hdi', 'quantile']
+        if method not in valid_methods:
+            raise ValueError("method must be 'hdi' or 'quantile'")
+        if method == 'hdi' and bounds is None:
+            bounds = 0.95
+        if method == 'quantile' and bounds is None:
+            bounds = [0.025, 0.975]
+        if method == 'hdi' and (bounds <= 0 or bounds >= 1):
+            raise ValueError("if method is 'hdi' then bounds must be a float between 0 and 1")
+        if method == 'quantiles' and len(quantiles) != 2:
+            raise ValueError("quantiles must be a list of length 2")
+        if names is None:
+            names = [
+                    'theta_a',
+                    'theta_b',
+                    'delta'
+                    ]
+        if len(names) > 3:
+            raise ValueError('names must be a list of length 3')   
+        if method == 'hdi':
+            interval_name = 'hdi'
+            centre_line_name = 'map'
+        else: 
+            interval_name = 'credible interval'
+            centre_line_name = 'median'               
+        fig = make_subplots(rows=1,
+                            cols=3,
+                            shared_xaxes=False,
+                            shared_yaxes=False,
+                            subplot_titles=tuple(names))
+        draws = [
+                 self.a_draw,
+                 self.b_draw,
+                 self.d_draw
+                 ]
+        for i in range(0,3):
+            cl = _get_centre_lines(draws[i], method=method)
+            intervals = _get_intervals(draws[i], method=method, bounds=bounds)
+            fig.add_trace(_make_density_go(draws[i], name='posterior density', col=col), 1, i+1)
+            fig.add_trace(_make_histogram_go(draws[i], name='posterior draws', col=col), 1, i+1)  
+            fig.add_trace(_make_line_go(cl, name=centre_line_name, col=col), 1, i+1)   
+            fig.add_trace(_make_area_go(intervals, name=interval_name, col=col), 1, i+1)       
+        fig.update_layout(shapes=[_make_delta_line(self.d_draw, delta_line=delta_line)])
+        fig.update_yaxes(title_text='density', row=1, col=1)
+        name_set = set()
+        fig.for_each_trace(lambda trace: 
+            trace.update(showlegend=False)
+                if (trace.name in name_set) else name_set.add(trace.name))
+        if fig_size is not None:
+            fig.update_layout(height=fig_size[1], width=fig_size[0])
+        return fig
 
-    def _calculate_map(self, draws, num=10000):
-        # Estimates the MAP based on the maxima of the KDE estimate
-        x, kde_density = self._calculate_kde(draws, num=num)
-        return x[np.argmax(kde_density)]
+
+
+
+
