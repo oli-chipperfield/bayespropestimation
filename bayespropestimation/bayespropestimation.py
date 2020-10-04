@@ -211,13 +211,9 @@ class BayesProportionsEstimation:
         if direction not in dir_opts:
             raise ValueError("direction must be 'greater than' or 'less than'")
         if direction == 'greater than':
-            print(direction)
             p = len(self.d_draw[self.d_draw > 0]) / len(self.d_draw)
-            print(p)
         else:
-            print(direction)
             p = len(self.d_draw[self.d_draw < 0]) / len(self.d_draw)
-            print(p)
         i = self._probability_interpretation_guide(p)
         if names is None:
             names = [
