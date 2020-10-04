@@ -129,7 +129,7 @@ class BayesProportionsEstimation:
         Summarises the properties of the estimated posterior using the MAP and HDI
         Parameters
         ----------
-        mean:  boolean, default True, calculates the mean of the draws from the posterior.  Default True
+        mean:  boolean, calculates the mean of the draws from the posterior.  Default True
         interval: float, defines the HDI interval.  Default = 0.95 (i.e. 95% HDI interval)
         names:  list of length 3, parameter names in order: a, b, b-a.  Default ['theta_a', 'theta_b', 'delta']
         Returns
@@ -161,6 +161,158 @@ class BayesProportionsEstimation:
             df.columns = col_names
         df['parameter'] = names
         return df    
+
+    def _probability_interpretation_guide(self, p):
+        # Interpretation guide for probabilities using: 
+        # https://www.cia.gov/library/center-for-the-study-of-intelligence/csi-publications/books-and-monographs/sherman-kent-and-the-board-of-national-estimates-collected-essays/6words.html
+        if p >= 0 and p <= 0.13:
+            i = 'almost certainly not'
+        elif p > 0.13 and p <= 0.4:
+            i = 'probably not'
+        elif p > 0.4 and p <= 0.6:
+            i = 'about equally likely'
+        elif p > 0.6 and p <= 0.86:
+            i = 'probably'
+        elif p > 0.86 and p <= 1:
+            i = 'almost certain'
+        else:
+            raise ValueError('p must be >= 0 and <= 1')
+        return i
+
+    def _print_inference_probability(self, p, i, direction, value, names):
+        # Combines inference values into a readable string
+        s = 'The probability that ' + names[1] + ' is ' + direction + ' ' + names[0]
+        if value != 0:
+            s = s + ' by more than ' + str(value)
+        s = s + ' is ' + ('%.5g' % (p * 100)) + '%.'
+        s = s + ' Therefore ' + names[1] + ' is ' + i + ' ' + direction + ' ' + names[0]
+        if value != 0:
+            s = s + ' by more than ' + str(value)
+        s = s + '.'
+        return s
+
+    def infer_delta_probability(self, direction='greater than', value=0, print_inference=True, names = None):
+        '''
+        Provides a guide to making inferences on the posterior delta, based on proportion of
+        draws to the right or left of a given value. 
+        Parameters
+        ----------
+        greater_than: str, defines the direction of the inference, options 'greater than' or 'less than'.  Default is 'greater than'.
+        value: float,  defines the value about which to make the inference.  Default = 0.
+        print_inference:  boolean, prints a readable string.  Default is True.
+        names:  list of length 3, parameter names in order: a, b, b-a.  Default ['theta_a', 'theta_b', 'delta']
+        Returns
+        -------
+        tuple
+            - float, probability that b > (a + value) or b < (a + value).
+            - str, string interpretation of that probabiliyu       
+        '''
+        dir_opts = ['greater than', 'less than']
+        if direction not in dir_opts:
+            raise ValueError("direction must be 'greater than' or 'less than'")
+        if direction == 'greater than':
+            print(direction)
+            p = len(self.d_draw[self.d_draw > 0]) / len(self.d_draw)
+            print(p)
+        else:
+            print(direction)
+            p = len(self.d_draw[self.d_draw < 0]) / len(self.d_draw)
+            print(p)
+        i = self._probability_interpretation_guide(p)
+        if names is None:
+            names = [
+                    'theta_a',
+                    'theta_b',
+                    'delta'
+                    ]
+        if len(names) > 3:
+            raise ValueError('names must be a list of length 3')
+        if print_inference is True:
+            print(self._print_inference_probability(p, i, direction, value, names))
+        return p, i
+
+    def _bayes_factor_interpretation_guide(self, bf):
+        # Interpretation guide for bayes factors using: 
+        # Jeffreys guide (https://en.wikipedia.org/wiki/Bayes_factor#cite_note-9)
+        if np.isinf(bf) or bf > np.power(10, 2):
+            i = 'decisive'
+        elif bf > np.power(10, 3/2) and bf <= np.power(10, 2):
+            i = 'very strong'
+        elif bf > 10 and bf <= np.power(10, 3/2):
+            i = 'strong'
+        elif bf > np.power(10, 1/2) and bf <= 10:
+            i = 'substantial'
+        elif bf >= 1 and bf <= np.power(10, 1/2):
+            i = 'barely worth mentioning'
+        elif bf < 1:
+            i = 'negative'
+        else:
+            raise ValueError('bf did not satisfy range of criteria')
+        return i
+
+    def _print_inference_bayes_factor(self, bf, i, direction, value, names):
+        s = 'The calculated bayes factor for the hypothesis that ' + names[1] + ' is ' + direction + ' ' + names[0]
+        if value != 0:
+            s = s + ' by more than ' + str(value)
+        s = s + ' versus the hypothesis that ' + names[0] + ' is ' + direction + ' ' + names[0]
+        if value != 0:
+            s = s + ' by more than ' + str(value)
+        s = s + ' is ' 
+        if np.isinf(bf) is True:
+            s = s + 'more than 100'
+        else:
+            s = s + ('%.5g' % bf)
+        s = s + '. Therefore the strength of evidence for this hypothesis is ' + i + '.' 
+        return s
+
+    def _estimate_bayes_factor(self, p_h1, p_h2):
+        # Estimates bayes Factor
+        if p_h2 == 0:
+            k = np.Infinity
+        else:
+            k = p_h1 / p_h2
+        return k
+
+    def infer_delta_bayes_factor(self, direction='greater than', value=0, print_inference=True, names=None):
+        '''
+        Provides a guide to making inferences on the posterior delta, based on the Bayes Factor by estimating
+        P(D|H1) / P(D|H2) for the hypotheses H1: b>(a + value) vs H2: (a + value)>b (or vice versa).  
+        Where D denotes the observed data.
+        Parameters
+        ----------
+        greater_than: str, defines the direction of the inference, options 'greater than' or 'less than'.  Default is 'greater than'.
+        value: float,  defines the value about which to make the inference.  Default = 0.
+        print_inference:  boolean, prints a readable string.  Default is True.
+        names:  list of length 3, parameter names in order: a, b, b-a.  Default ['theta_a', 'theta_b', 'delta']
+        Returns
+        -------
+        tuple
+            - float, bayes factor for P(D|H1) / P(D|H2) for the hypotheses H1: b>(a + value) vs H2: (a + value)>b (or vice versa).
+            - str, string interpretation of that bayes factor    
+        '''
+        dir_opts = ['greater than', 'less than']
+        if direction not in dir_opts:
+            raise ValueError("direction must be 'greater than' or 'less than'")
+        if direction == 'greater than':
+            p_h1 = len(self.d_draw[self.d_draw > value]) / len(self.d_draw)       
+            p_h2 = 1 - p_h1
+            bf = self._estimate_bayes_factor(p_h1, p_h2)
+        else:
+            p_h1 = len(self.d_draw[self.d_draw < value]) / len(self.d_draw)       
+            p_h2 = 1 - p_h1
+            bf = self._estimate_bayes_factor(p_h1, p_h2)
+        i = self._bayes_factor_interpretation_guide(bf)
+        if names is None:
+            names = [
+                    'theta_a',
+                    'theta_b',
+                    'delta'
+                    ]
+        if len(names) > 3:
+            raise ValueError('names must be a list of length 3')
+        if print_inference is True:
+            print(self._print_inference_bayes_factor(bf, i, direction, value, names))
+        return bf, i
 
     def kde_plot(self, quantiles=[0.025, 0.975], fig_size=(15, 5), names=None):
         '''
