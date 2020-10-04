@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import scipy as scipy
 
 
 class BayesProportionsEstimation:
@@ -126,10 +127,10 @@ class BayesProportionsEstimation:
             raise ValueError("quantiles must be a list of length 2")
         if names is None:
             names = [
-                'theta_a',
-                'theta_b',
-                'delta'
-                ]
+                    'theta_a',
+                    'theta_b',
+                    'delta'
+                    ]
         if len(names) > 3:
             raise ValueError('names must be a list of length 3')
         draws = [self.a_draw, self.b_draw, self.d_draw]
@@ -143,3 +144,10 @@ class BayesProportionsEstimation:
             axes[i].fill_between(x, y, where=((x <= q[0]) | (x >= q[1])), alpha=0.1)
             if i == 2:
                 axes[i].axvline(0, ls='--', color='red')
+
+    def _calculate_kde(self, draws, num=1000):
+        # Estimates a KDE distribution from the posterior draws
+        kde = scipy.stats.gaussian_kde(draws)
+        x = np.linspace(np.min(draws), np.max(draws), num=num)
+        kde_density = kde(x)
+        return x, kde_density
