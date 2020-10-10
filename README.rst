@@ -121,17 +121,21 @@ Posterior densities are estimated when the class is intialised. There are five m
 .. code-block:: python
 
     ExampleBayes.infer_delta_probability()
-    # Returns probability estimate of the delta parameter being greater than 0, plus an aid to inference.  Includes an optional print out of the probability and inference.
+    # Returns probability estimate of the delta parameter being greater than 0, plus an aid to inference.  
+    #Includes an optional print out of the probability and inference.
     
     'The probability that theta_b is greater than theta_a is 98.63%. Therefore theta_b is almost certainly greater than theta_a.'
     '(0.9863, 'almost certainly')'
+..
 
 .. code-block:: python
     ExampleBayes.infer_delta_bayes_factor()
-    # Returns the Bayes factor of the hypothesis that P(theta_b > theta_a | D) where D is the data, plus an aid to inference.  Includes an optional print out of the Bayes factor and inference.
+    # Returns the Bayes factor of the hypothesis that P(theta_b > theta_a | D) where D is the data, plus an aid to inference.  
+    # Includes an optional print out of the Bayes factor and inference.
 
     'The calculated bayes factor for the hypothesis that theta_b is greater than theta_a versus the hypothesis that theta_a is greater than theta_a is 71.993. Therefore the strength of evidence for this hypothesis is very strong.'
     '(71.99270072992677, 'very strong')'
+..
 
 .. code-block:: python
     ExampleBayes.posterior_plot
