@@ -141,14 +141,7 @@ Posterior densities are estimated when the class is intialised. There are five m
     ExampleBayes.posterior_plot
     # Returns KDE plots of samples from the posterior densities of the parameters
 
-.. raw::
-    
-    :file: https://github.com/oli-chipperfield/bayespropestimation/tree/update-readmes/images/example_posterior_plot.html
-
-
-
-
-.. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/master/images/example_kde.png
+.. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/master/images/example_posterior_plot.png
 
 To see how to use non-default parameters, refer to the `usage guid <https://github.com/oli-chipperfield/bayespropestimation/blob/master/docs/bayespropestimation_usage.ipynb>`_ or refer to the doc-strings in the `source <https://github.com/oli-chipperfield/bayespropestimation/bayespropestimation/bayespropestimation.py>`_.
 
