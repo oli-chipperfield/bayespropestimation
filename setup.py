@@ -37,7 +37,7 @@ Simple class and methods for the Bayesian estimation and comparison of proportio
 
 - A user can input the results from two samples, A and B, and get estimates of the posterior density and their difference.  
 
-- Estimation is from simple simulation from the conjugate posterior distributions.  
+- Estimation is by simple simulation from the conjugate posterior distributions.  
 
 - Provides summary statistics and visualisations for the estimated parameters.
 
@@ -70,6 +70,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/oli-chipperfield/bayespropestimation',
-    version='0.1.7',
+    version='0.9.0',
     zip_safe=False,
 )

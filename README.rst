@@ -6,6 +6,8 @@ Bayesian estimation of proportions
         :target: https://pypi.python.org/pypi/bayespropestimation
 
 
+
+
 Simple class and methods for the Bayesian estimation and comparison of proportions.
 
 * Free software: MIT license
@@ -14,7 +16,7 @@ Features
 --------
 
 * Estimates the posterior distribution of the mean parameter for two binomial samples, A and B.
-* Estimates of the posterior distribution of difference in mean parameters for two binomial samples, A and B.
+* Estimates of the posterior distribution of the difference in mean parameters for two binomial samples, A and B.
 * Provides summary statistics and visualisations for the estimated parameters.
 * The prior distribution, sample count, random seed, credible intervals and parameter names can all be customised.
 
