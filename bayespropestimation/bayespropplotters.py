@@ -12,7 +12,7 @@ def _get_centre_lines(draws, method):
         cl = _calculate_map(draws)
     elif method == 'quantile':
         cl = np.quantile(draws, 0.5)
-    x, kde_density = _calculate_kde(draws, num = 1000)
+    x, kde_density = _calculate_kde(draws, num = 100)
     best_y = kde_density[np.argmin(np.abs(x - cl))]
     return {'x': cl, 'y': best_y}
 
@@ -22,14 +22,14 @@ def _get_intervals(draws, method, bounds):
         il = az.hdi(draws, bounds)
     elif method == 'quantile':
         il = np.quantile(draws, bounds)
-    x, kde_density = _calculate_kde(draws, num = 1000)
+    x, kde_density = _calculate_kde(draws, num = 100)
     subx = x[(x > il[0]) & (x < il[1])]
     kde_density = kde_density[(x > il[0]) & (x < il[1])]
     return {'x': subx, 'y': kde_density}
 
 def _make_density_go(draws, name, col='#000000'):
     # Makes a KDE density graph object
-    x, kde_density = _calculate_kde(draws, num = 1000)
+    x, kde_density = _calculate_kde(draws, num = 100)
     graphobj = go.Scatter(x=x,
                           y=kde_density,
                           line={'color': col},
@@ -66,7 +66,7 @@ def _make_line_go(line_object, name, col='#000000'):
 
 def _make_delta_line(draws, delta_line, col='#d62728'):
     # Make line dictionary object for the delta posterior
-    x, kde_density = _calculate_kde(draws, num = 1000)
+    x, kde_density = _calculate_kde(draws, num = 100)
     maxy = np.max(kde_density) * 1.2    
     linedict = {'type': 'line',
                 'x0': delta_line,
