@@ -184,7 +184,7 @@ class BayesProportionsEstimation:
         elif p > 0.6 and p <= 0.86:
             i = 'probably'
         elif p > 0.86 and p <= 1:
-            i = 'almost certain'
+            i = 'almost certainly'
         else:
             raise ValueError('p must be >= 0 and <= 1')
         return i
@@ -207,7 +207,7 @@ class BayesProportionsEstimation:
         draws to the right or left of a given value. 
         Parameters
         ----------
-        greater_than: str, defines the direction of the inference, options 'greater than' or 'less than'.  Default is 'greater than'.
+        direction: str, defines the direction of the inference, options 'greater than' or 'less than'.  Default is 'greater than'.
         value: float,  defines the value about which to make the inference.  Default = 0.
         print_inference:  boolean, prints a readable string.  Default is True.
         names:  list of length 3, parameter names in order: a, b, b-a.  Default ['theta_a', 'theta_b', 'delta']
@@ -286,7 +286,7 @@ class BayesProportionsEstimation:
         Where D denotes the observed data.
         Parameters
         ----------
-        greater_than: str, defines the direction of the inference, options 'greater than' or 'less than'.  Default is 'greater than'.
+        direction: str, defines the direction of the inference, options 'greater than' or 'less than'.  Default is 'greater than'.
         value: float,  defines the value about which to make the inference.  Default = 0.
         print_inference:  boolean, prints a readable string.  Default is True.
         names:  list of length 3, parameter names in order: a, b, b-a.  Default ['theta_a', 'theta_b', 'delta']
