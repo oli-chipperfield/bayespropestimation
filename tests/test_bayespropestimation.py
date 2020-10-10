@@ -105,7 +105,7 @@ def make_hdi_summary_results():
 
 @pytest.fixture
 def make_infer_delta_probability_result():
-    return (0.9863, 'almost certain')
+    return (0.9863, 'almost certainly')
 
 @pytest.fixture
 def make_infer_delta_bayes_factor_result():
