@@ -1,11 +1,8 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import scipy as scipy
 import arviz as az
 
 from plotly.subplots import make_subplots
-from bayespropestimation.bayesprophelpers import _calculate_kde
 from bayespropestimation.bayesprophelpers import _calculate_map
 from bayespropestimation.bayespropplotters import _get_centre_lines
 from bayespropestimation.bayespropplotters import _get_intervals 
@@ -16,6 +13,7 @@ from bayespropestimation.bayespropplotters import _make_line_go
 from bayespropestimation.bayespropplotters import _make_delta_line
 
 class BayesProportionsEstimation:
+
 
     def __init__(self, a, b, prior_alpha=0.5, prior_beta=0.5, n=10000, seed=None):
         '''
@@ -200,7 +198,7 @@ class BayesProportionsEstimation:
         s = s + '.'
         return s
 
-    def infer_delta_probability(self, direction='greater than', value=0, print_inference=True, names = None):
+    def infer_delta_probability(self, direction='greater than', value=0, print_inference=True, names=None):
         '''
         Provides a guide to making inferences on the posterior delta, based on proportion of
         draws to the right or left of a given value. 
@@ -350,7 +348,7 @@ class BayesProportionsEstimation:
             bounds = [0.025, 0.975]
         if method == 'hdi' and (bounds <= 0 or bounds >= 1):
             raise ValueError("if method is 'hdi' then bounds must be a float between 0 and 1")
-        if method == 'quantiles' and len(quantiles) != 2:
+        if method == 'quantiles' and len(bounds) != 2:
             raise ValueError("quantiles must be a list of length 2")
         if names is None:
             names = [
@@ -376,7 +374,7 @@ class BayesProportionsEstimation:
                  self.b_draw,
                  self.d_draw
                  ]
-        for i in range(0,3):
+        for i in range(0, 3):
             cl = _get_centre_lines(draws[i], method=method)
             intervals = _get_intervals(draws[i], method=method, bounds=bounds)
             fig.add_trace(_make_density_go(draws[i], name='posterior density', col=col), 1, i+1)
