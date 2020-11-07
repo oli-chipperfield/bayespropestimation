@@ -13,22 +13,19 @@ with open('HISTORY.rst') as history_file:
 requirements = ['numpy>=1.17.2',
                 'scipy>=1.3.1',
                 'pandas>=0.25.1',
-                'matplotlib>=3.1.1',
-                'seaborn>=0.9.0',
+                'plotly>=4.9.0',
                 'arviz>=0.9.0']
 
 setup_requirements = ['pytest-runner',
                       'scipy>=1.3.1',
                       'pandas>=0.25.1',
-                      'matplotlib>=3.1.1',
-                      'seaborn>=0.9.0',
+                      'plotly>=4.9.0',
                       'arviz>=0.9.0']
 
 test_requirements = ['pytest>=3',
                      'scipy>=1.3.1',
                      'pandas>=0.25.1',
-                     'matplotlib>=3.1.1',
-                     'seaborn>=0.9.0',
+                     'plotly>=4.9.0',
                      'arviz>=0.9.0']
 
 long_description = '''
@@ -70,6 +67,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/oli-chipperfield/bayespropestimation',
-    version='0.9.0',
+    version='0.9.1',
     zip_safe=False,
 )
