@@ -14,4 +14,3 @@ def _calculate_map(draws, num=10000):
     # Estimates the MAP based on the maxima of the KDE estimate
     x, kde_density = _calculate_kde(draws, num=num)
     return x[np.argmax(kde_density)]
-    
