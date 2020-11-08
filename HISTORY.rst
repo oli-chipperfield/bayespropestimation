@@ -20,7 +20,7 @@ History
 * Almost 'final' version
 * Improve readmes
 
-0.9.1 (2020-10-10)
+0.9.1 (2020-11-08)
 ------------------
 
 * Almost 'final' version
