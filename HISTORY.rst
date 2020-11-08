@@ -19,3 +19,10 @@ History
 
 * Almost 'final' version
 * Improve readmes
+
+0.9.1 (2020-10-10)
+------------------
+
+* Almost 'final' version
+* Update requirements
+* Run black
