@@ -47,8 +47,9 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-lint: ## check style with flake8
-	flake8 bayespropestimation tests
+lint: ## check and correct style
+	isort bayespropestimation tests --recursive
+	black bayespropestimation tests 
 
 test: ## run tests quickly with the default Python
 	pytest tests

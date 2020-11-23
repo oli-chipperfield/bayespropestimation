@@ -26,3 +26,9 @@ History
 * Almost 'final' version
 * Update requirements
 * Run black
+
+0.9.2 (2020-11-08)
+------------------
+
+* Almost 'final' version
+* Fix make file

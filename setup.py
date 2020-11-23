@@ -52,7 +52,7 @@ Simple class and methods for the Bayesian estimation and comparison of proportio
 setup(
     author="Oliver Chipperfield",
     author_email="omc0dev@googlemail.com",
-    python_requires=">=3.7",
+    python_requires=">=3.5",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
@@ -73,6 +73,6 @@ setup(
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/oli-chipperfield/bayespropestimation",
-    version="0.9.1",
+    version="0.9.2",
     zip_safe=False,
 )

@@ -5,13 +5,15 @@ import pytest
 
 from bayespropestimation.bayespropestimation import BayesProportionsEstimation
 from bayespropestimation.bayesprophelpers import _calculate_kde, _calculate_map
-from bayespropestimation.bayespropplotters import (_get_centre_lines,
-                                                   _get_intervals,
-                                                   _make_area_go,
-                                                   _make_delta_line,
-                                                   _make_density_go,
-                                                   _make_histogram_go,
-                                                   _make_line_go)
+from bayespropestimation.bayespropplotters import (
+    _get_centre_lines,
+    _get_intervals,
+    _make_area_go,
+    _make_delta_line,
+    _make_density_go,
+    _make_histogram_go,
+    _make_line_go,
+)
 
 
 def compare_dictionaries(p, z):
@@ -227,8 +229,7 @@ def test_BayesProportionsEstimation_with_mmake_explicit_n_initialises(
     make_a_list, make_b_list, make_explicit_n
 ):
     try:
-        BayesProportionsEstimation(
-            a=make_a_list, b=make_b_list, n=make_explicit_n)
+        BayesProportionsEstimation(a=make_a_list, b=make_b_list, n=make_explicit_n)
     except:
         raise pytest.fail()
 
@@ -276,16 +277,14 @@ def test_BayesProportionsEstimation_with_make_invalid_prior_returns_ValueError(
         BayesProportionsEstimation(
             a=make_a_list, b=make_b_list, prior_alpha=make_invalid_prior
         )
-    assert str(
-        e.value) == "the prior_alpha and/or prior_beta parameters must be > 0"
+    assert str(e.value) == "the prior_alpha and/or prior_beta parameters must be > 0"
 
 
 def test_BayesProportionsEstimation_with_make_invalid_n_returns_ValueError(
     make_a_list, make_b_list, make_invalid_n
 ):
     with pytest.raises(ValueError) as e:
-        BayesProportionsEstimation(
-            a=make_a_list, b=make_b_list, n=make_invalid_n)
+        BayesProportionsEstimation(a=make_a_list, b=make_b_list, n=make_invalid_n)
     assert str(e.value) == "n must be a positive integer"
 
 
@@ -293,8 +292,7 @@ def test_BayesProportionsEstimation_with_make_invalid_seed_returns_ValueError(
     make_a_list, make_b_list, make_invalid_seed
 ):
     with pytest.raises(ValueError) as e:
-        BayesProportionsEstimation(
-            a=make_a_list, b=make_b_list, seed=make_invalid_seed)
+        BayesProportionsEstimation(a=make_a_list, b=make_b_list, seed=make_invalid_seed)
     assert str(e.value) == "seed must be a positive integer or None"
 
 
