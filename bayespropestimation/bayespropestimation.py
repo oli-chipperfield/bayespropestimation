@@ -1,16 +1,16 @@
+import arviz as az
 import numpy as np
 import pandas as pd
-import arviz as az
-
 from plotly.subplots import make_subplots
+
 from bayespropestimation.bayesprophelpers import _calculate_map
-from bayespropestimation.bayespropplotters import _get_centre_lines
-from bayespropestimation.bayespropplotters import _get_intervals
-from bayespropestimation.bayespropplotters import _make_density_go
-from bayespropestimation.bayespropplotters import _make_histogram_go
-from bayespropestimation.bayespropplotters import _make_area_go
-from bayespropestimation.bayespropplotters import _make_line_go
-from bayespropestimation.bayespropplotters import _make_delta_line
+from bayespropestimation.bayespropplotters import (_get_centre_lines,
+                                                   _get_intervals,
+                                                   _make_area_go,
+                                                   _make_delta_line,
+                                                   _make_density_go,
+                                                   _make_histogram_go,
+                                                   _make_line_go)
 
 
 class BayesProportionsEstimation:
@@ -47,7 +47,8 @@ class BayesProportionsEstimation:
                 "the count of successes for a and/or b exceeds the number of trials"
             )
         if (self.prior_alpha <= 0) or (self.prior_beta <= 0):
-            raise ValueError("the prior_alpha and/or prior_beta parameters must be > 0")
+            raise ValueError(
+                "the prior_alpha and/or prior_beta parameters must be > 0")
         if self.n <= 0:
             raise ValueError("n must be a positive integer")
         if self.seed is not None and str(self.seed).isdigit() == False:
@@ -187,11 +188,13 @@ class BayesProportionsEstimation:
 
     def _print_inference_probability(self, p, i, direction, value, names):
         # Combines inference values into a readable string
-        s = "The probability that " + names[1] + " is " + direction + " " + names[0]
+        s = "The probability that " + \
+            names[1] + " is " + direction + " " + names[0]
         if value != 0:
             s = s + " by more than " + str(value)
         s = s + " is " + ("%.5g" % (p * 100)) + "%."
-        s = s + " Therefore " + names[1] + " is " + i + " " + direction + " " + names[0]
+        s = s + " Therefore " + names[1] + " is " + \
+            i + " " + direction + " " + names[0]
         if value != 0:
             s = s + " by more than " + str(value)
         s = s + "."
@@ -228,7 +231,8 @@ class BayesProportionsEstimation:
         if len(names) > 3:
             raise ValueError("names must be a list of length 3")
         if print_inference is True:
-            print(self._print_inference_probability(p, i, direction, value, names))
+            print(self._print_inference_probability(
+                p, i, direction, value, names))
         return p, i
 
     def _bayes_factor_interpretation_guide(self, bf):
@@ -324,7 +328,8 @@ class BayesProportionsEstimation:
         if len(names) > 3:
             raise ValueError("names must be a list of length 3")
         if print_inference is True:
-            print(self._print_inference_bayes_factor(bf, i, direction, value, names))
+            print(self._print_inference_bayes_factor(
+                bf, i, direction, value, names))
         return bf, i
 
     def posterior_plot(
@@ -386,16 +391,20 @@ class BayesProportionsEstimation:
             cl = _get_centre_lines(draws[i], method=method)
             intervals = _get_intervals(draws[i], method=method, bounds=bounds)
             fig.add_trace(
-                _make_density_go(draws[i], name="posterior density", col=col), 1, i + 1
+                _make_density_go(
+                    draws[i], name="posterior density", col=col), 1, i + 1
             )
             fig.add_trace(
-                _make_histogram_go(draws[i], name="posterior draws", col=col), 1, i + 1
+                _make_histogram_go(
+                    draws[i], name="posterior draws", col=col), 1, i + 1
             )
-            fig.add_trace(_make_line_go(cl, name=centre_line_name, col=col), 1, i + 1)
+            fig.add_trace(_make_line_go(
+                cl, name=centre_line_name, col=col), 1, i + 1)
             fig.add_trace(
                 _make_area_go(intervals, name=interval_name, col=col), 1, i + 1
             )
-        fig.update_layout(shapes=[_make_delta_line(self.d_draw, delta_line=delta_line)])
+        fig.update_layout(shapes=[_make_delta_line(
+            self.d_draw, delta_line=delta_line)])
         fig.update_yaxes(title_text="density", row=1, col=1)
         name_set = set()
         fig.for_each_trace(
