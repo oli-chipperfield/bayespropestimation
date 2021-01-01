@@ -2,4 +2,4 @@
 
 __author__ = """Oliver Chipperfield"""
 __email__ = "omc0dev@googlemail.com"
-__version__ = "0.9.2"
+__version__ = "0.9.3"

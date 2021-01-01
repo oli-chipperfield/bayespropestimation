@@ -16,9 +16,14 @@ Features
 --------
 
 * Estimates the posterior distribution of the mean parameter for two binomial samples, A and B.
-* Estimates of the posterior distribution of the difference in mean parameters for two binomial samples, A and B.
+* Estimates the posterior distribution of the difference in mean parameters for two binomial samples, A and B.
 * Provides summary statistics and visualisations for the estimated parameters.
 * The prior distribution, sample count, random seed, credible intervals and parameter names can all be customised.
+
+Need to work with continuous data?
+-----------------------------------
+
+See the `bayestestimation <https://github.com/oli-chipperfield/bayestestimation>`_ module for a counterpart to this module.  Designed for working with continuous data.
 
 
 ============
@@ -85,13 +90,13 @@ To use Bayesian estimation of proportions in a project
 Simple example
 --------------
 
-To carry out a simple estimation of the posterior density of two samples and an estimate of the difference, using an uninformative prior.  Import the `BayesProportionsEstimation` class.
+To carry out a simple estimation of the posterior density of two samples and an estimate of the difference, using an uninformative prior.  Import the ``BayesProportionsEstimation`` class.
 
 .. code-block:: python
 
     from bayespropestimation.bayespropestimation import BayesProportionsEstimation
 
-Define data from samples A and B as two lists of format `[successes, trials]` and initialise the `BayesProportionsEstimation` class.
+Define data from samples A and B as two lists in the format ``[successes, trials]`` and initialise the ``BayesProportionsEstimation`` class.
 
 .. code-block:: python
 
@@ -104,7 +109,7 @@ Posterior densities are estimated when the class is intialised. There are five m
 .. code-block:: python
 
     ExampleBayes.get_posteriors()
-    # Returns tuple of samples from the posterior distributions for parameters
+    # Returns tuple of samples from the posterior distributions of parameters
 
 .. code-block:: python
 
@@ -124,7 +129,7 @@ Posterior densities are estimated when the class is intialised. There are five m
 
     ExampleBayes.infer_delta_probability()
     # Returns probability estimate of the delta parameter being greater than 0, plus an aid to inference.  
-    #Includes an optional print out of the probability and inference.
+    # Includes an optional print out of the probability and inference.
     
     'The probability that theta_b is greater than theta_a is 98.63%. Therefore theta_b is almost certainly greater than theta_a.'
     '(0.9863, 'almost certainly')'
@@ -145,7 +150,7 @@ Posterior densities are estimated when the class is intialised. There are five m
 
 .. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/master/images/example_posterior_plot.png
 
-To see how to use non-default parameters, refer to the `usage guid <https://github.com/oli-chipperfield/bayespropestimation/blob/master/docs/bayespropestimation_usage.ipynb>`_ or refer to the doc-strings in the `source <https://github.com/oli-chipperfield/bayespropestimation/bayespropestimation/bayespropestimation.py>`_.
+To see how to use non-default parameters refer to the `usage guide <https://github.com/oli-chipperfield/bayespropestimation/blob/master/docs/bayespropestimation_usage.ipynb>`_ or refer to the doc-strings in the `source <https://github.com/oli-chipperfield/bayespropestimation/bayespropestimation/bayespropestimation.py>`_.
 
 Credits
 -------
