@@ -36,15 +36,15 @@ test_requirements = [
 
 long_description = """
 
-Simple class and methods for the Bayesian estimation and comparison of proportions.  i.e. a simple Bayesian AB test of proportions.  
+Simple class and methods for the Bayesian estimation and comparison of proportions.
 
-- A user can input the results from two samples, A and B, and get estimates of the posterior density and their difference.  
+- Estimates the posterior distribution of the mean parameter for two binomial samples, A and B.
 
-- Estimation is by simple simulation from the conjugate posterior distributions.  
+- Estimates the posterior distribution of the difference in mean parameters for two binomial samples, A and B.
 
 - Provides summary statistics and visualisations for the estimated parameters.
 
-- The prior distribution, sample count, random seed, credible intervals and parameter names can all be customised.
+-  The prior distribution, sample count, random seed, credible intervals and parameter names can all be customised.
 
 """
 
