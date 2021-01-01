@@ -150,7 +150,7 @@ Posterior densities are estimated when the class is intialised. There are five m
 
 .. image:: https://github.com/oli-chipperfield/bayespropestimation/blob/master/images/example_posterior_plot.png
 
-To see how to use non-default parameters refer to the `usage guide <https://github.com/oli-chipperfield/bayespropestimation/blob/master/docs/bayespropestimation_usage.ipynb>`_ or refer to the doc-strings in the `source <https://github.com/oli-chipperfield/bayespropestimation/bayespropestimation/bayespropestimation.py>`_.
+To see how to use non-default parameters refer to the `usage guide <https://github.com/oli-chipperfield/bayespropestimation/blob/master/docs/bayespropestimation_usage.ipynb>`_ or refer to the doc-strings in the `source <https://github.com/oli-chipperfield/bayespropestimation/blob/master/bayespropestimation/bayespropestimation.py>`_.
 
 Credits
 -------
